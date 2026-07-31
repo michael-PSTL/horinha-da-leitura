@@ -1,7 +1,7 @@
 import { getConfig } from "./config.js";
 import { getSessionId, removeSessionId } from "../utils/storage.js";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "https://quiz-api-production-3617.up.railway.app";
 
 export async function QuizInfo() {
   const { slug, totalQuestions } = getConfig();
