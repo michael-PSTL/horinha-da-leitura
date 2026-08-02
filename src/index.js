@@ -15,9 +15,9 @@ export async function init(options) {
 
     console.log("Biblioteca inicializada.");
 
-    const { sessionId } = await createSession();
+    const { sessionCode } = await createSession();
 
-    saveSessionId(sessionId);
+    saveSessionCode(sessionCode);
 
     initializeEvents();
     initializeAnswers();

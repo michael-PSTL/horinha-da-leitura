@@ -1,5 +1,5 @@
 import { createSession, finishSession } from "../core/api.js";
-import { saveSessionId } from "../utils/storage.js";
+import { saveSessionCode } from "../utils/storage.js";
 
 const TIMEOUT = 5 * 60 * 1000; // 5 minutos
 
@@ -50,9 +50,9 @@ async function restartSession() {
   }
 
   try {
-    const { sessionId } = await createSession();
+    const { sessionCode } = await createSession();
 
-    saveSessionId(sessionId);
+    saveSessionCode(sessionCode);
 
     sessionFinished = false;
 
