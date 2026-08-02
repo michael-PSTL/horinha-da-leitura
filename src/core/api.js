@@ -1,5 +1,9 @@
 import { getConfig } from "./config.js";
-import { getSessionId, removeSessionId } from "../utils/storage.js";
+import {
+  getSessionCode,
+  saveSessionCode,
+  removeSessionCode,
+} from "../utils/storage.js";
 
 const API_URL = "https://quiz-api-production-3617.up.railway.app";
 
@@ -35,17 +39,29 @@ export async function createSession() {
     throw new Error("Erro ao iniciar sessão.");
   }
 
-  return await response.json();
+  const data = await response.json();
+
+  if (data.sessionCode) {
+    saveSessionCode(data.sessionCode);
+  }
+
+  return data;
 }
 
 export async function sendAnswer(questionNumber, optionSelected, answeredAt) {
+  const sessionCode = getSessionCode();
+
+  if (!sessionCode) {
+    throw new Error("Sessão não encontrada.");
+  }
+
   const response = await fetch(`${API_URL}/answer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      sessionId: Number(getSessionId()),
+      sessionCode,
       questionNumber,
       optionSelected,
       answeredAt,
@@ -58,9 +74,11 @@ export async function sendAnswer(questionNumber, optionSelected, answeredAt) {
 }
 
 export async function sendEvent(eventName, questionNumber = null) {
-  const sessionId = getSessionId();
+  const sessionCode = getSessionCode();
 
-  if (!sessionId) return;
+  if (!sessionCode) {
+    return;
+  }
 
   const response = await fetch(`${API_URL}/event`, {
     method: "POST",
@@ -68,7 +86,7 @@ export async function sendEvent(eventName, questionNumber = null) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      sessionId: Number(sessionId),
+      sessionCode,
       eventName,
       questionNumber,
     }),
@@ -80,13 +98,13 @@ export async function sendEvent(eventName, questionNumber = null) {
 }
 
 export async function finishSession() {
-  const sessionId = getSessionId();
+  const sessionCode = getSessionCode();
 
-  if (!sessionId) {
+  if (!sessionCode) {
     return;
   }
 
-  const response = await fetch(`${API_URL}/session/finish/${sessionId}`, {
+  const response = await fetch(`${API_URL}/session/finish/${sessionCode}`, {
     method: "POST",
     keepalive: true,
   });
@@ -95,5 +113,5 @@ export async function finishSession() {
     throw new Error("Erro ao finalizar sessão.");
   }
 
-  removeSessionId();
+  removeSessionCode();
 }

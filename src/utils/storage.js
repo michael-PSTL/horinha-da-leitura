@@ -1,13 +1,13 @@
-const SESSION_KEY = "quizSessionId";
+const SESSION_KEY = "quizSessionCode";
 
-export function saveSessionId(sessionId) {
-  localStorage.setItem(SESSION_KEY, sessionId);
+export function saveSessionCode(sessionCode) {
+  localStorage.setItem(SESSION_KEY, sessionCode);
 }
 
-export function getSessionId() {
+export function getSessionCode() {
   return localStorage.getItem(SESSION_KEY);
 }
 
-export function removeSessionId() {
+export function removeSessionCode() {
   localStorage.removeItem(SESSION_KEY);
 }
