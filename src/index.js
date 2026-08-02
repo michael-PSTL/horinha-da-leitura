@@ -1,6 +1,6 @@
 import { createSession } from "./core/api.js";
 import { setConfig } from "./core/config.js";
-import { saveSessionId } from "./utils/storage.js";
+import { saveSessionCode } from "./utils/storage.js";
 import { initializeSession } from "./services/session.js";
 import { initializeAnswers } from "./services/answer.js";
 import { initializeEvents } from "./services/event.js";
